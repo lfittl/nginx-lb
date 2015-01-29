@@ -1,0 +1,26 @@
+## nginx load balancer
+
+This is an example docker image of how to use etcd + nginx as a dynamic load balancer.
+
+Inspired by http://marceldegraaf.net/2014/04/24/experimenting-with-coreos-confd-etcd-fleet-and-cloudformation.html
+https://www.digitalocean.com/community/tutorials/how-to-use-confd-and-etcd-to-dynamically-reconfigure-services-in-coreos
+
+### Running on OSX (boot2docker)
+
+```
+docker run -d --name etcd -p 4001:4001 -p 8001:8001 quay.io/coreos/etcd -addr `boot2docker ip`:4001 -peer-addr `boot2docker ip`:8001 -name etcd-node1
+
+curl http://`boot2docker ip`:4001/v2/keys/app/id -XPUT -d value=example
+curl http://`boot2docker ip`:4001/v2/keys/app/subdomain -XPUT -d value=example.com
+curl http://`boot2docker ip`:4001/v2/keys/app/upstreams/app1 -XPUT -d value=`boot2docker ip`:8080
+
+docker build -t lfittl/nginx-lb .
+
+docker run -d --name nginx -p 80:80 -e HOST_IP=`boot2docker ip` lfittl/nginx-lb
+
+docker exec -it nginx cat /etc/nginx/conf.d/app.conf
+
+curl http://`boot2docker ip`:4001/v2/keys/app/upstreams/app2 -XPUT -d value=`boot2docker ip`:8081
+
+docker exec -it nginx cat /etc/nginx/conf.d/app.conf
+```
