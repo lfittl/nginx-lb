@@ -9,7 +9,7 @@ if [ "$1" = 'nginx' ]; then
 
   echo "[nginx] booting container. ETCD: $ETCD"
 
-  confd -interval 10 -node $ETCD -config-file /etc/confd/conf.d/nginx.toml &
+  confd -interval 10 -backend etcd -node $ETCD -config-file /etc/confd/conf.d/nginx.toml &
 
   exec "$@"
 fi

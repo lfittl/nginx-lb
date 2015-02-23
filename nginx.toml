@@ -1,6 +1,6 @@
 [template]
-prefix      = "/app"
-keys        = [ "/id", "/hostname", "/upstreams" ]
+# prefix      = "/nginxlb"
+keys        = [ "/app" ]
 owner       = "nginx"
 mode        = "0644"
 src         = "nginx.conf.tmpl"
