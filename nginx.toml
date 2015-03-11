@@ -1,6 +1,5 @@
 [template]
-# prefix      = "/nginxlb"
-keys        = [ "/app" ]
+keys        = [ "/lb" ]
 owner       = "nginx"
 mode        = "0644"
 src         = "nginx.conf.tmpl"

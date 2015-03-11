@@ -9,10 +9,9 @@ docker run -d --name etcd -p 4001:4001 -p 8001:8001 quay.io/coreos/etcd -addr `b
 
 export ETCDCTL_PEERS=`boot2docker ip`:4001
 
-etcdctl set /app/id example
-etcdctl set /app/hostname example.com
-etcdctl set /app/ssl myexamplecert
-etcdctl set /app/upstreams/app1 `boot2docker ip`:5000
+etcdctl set /lb/staging/hostname staging.example.com
+etcdctl set /lb/staging/ssl myexamplecert
+etcdctl set /lb/staging/upstreams/app1 `boot2docker ip`:5000
 
 docker build -t lfittl/nginx-lb .
 

@@ -1,21 +1,24 @@
-upstream {{getv "/app/id"}} {
-  {{range getvs "/app/upstreams/*"}}
+{{ range $server := lsdir "/lb" }}
+
+upstream {{ $server }}_pool {
+  {{range printf "/lb/%s/upstreams/*" $server | getvs}}
   server {{.}};
   {{ end }}
 }
 
 server {
   listen 80;
-  server_name {{getv "/app/hostname"}};
+  server_name {{printf "/lb/%s/hostname" $server | getv}};
 
-  {{if exists "/app/ssl"}}
+  {{ $ssl := printf "/lb/%s/ssl" $server }}
+  {{if exists $ssl}}
     listen 443 ssl;
-    ssl_certificate /etc/nginx/ssl/{{getv "/app/ssl"}}.crt;
-    ssl_certificate_key /etc/nginx/ssl/{{getv "/app/ssl"}}.key;
+    ssl_certificate /etc/nginx/ssl/{{getv $ssl}}.crt;
+    ssl_certificate_key /etc/nginx/ssl/{{getv $ssl}}.key;
   {{end}}
 
   location / {
-    proxy_pass http://{{getv "/app/id"}};
+    proxy_pass http://{{ $server }}_pool;
     proxy_redirect off;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -23,3 +26,5 @@ server {
     proxy_set_header X-Forwarded-Proto $scheme;
   }
 }
+
+{{ end }}
