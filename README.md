@@ -13,7 +13,7 @@ etcdctl set /lb/staging/hostname staging.example.com
 etcdctl set /lb/staging/ssl myexamplecert
 etcdctl set /lb/staging/upstreams/app1 app1:5000
 
-docker run -d --name nginx-lb -p 80:80 -p 443:443 -v /data/ssl:/etc/nginx/ssl -e  lfittl/nginx-lb
+docker run -d --name nginx-lb -p 80:80 -p 443:443 -v /data/ssl:/etc/nginx/ssl lfittl/nginx-lb
 ```
 
 ### Running on OSX (boot2docker)
