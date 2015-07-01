@@ -26,7 +26,7 @@ http {
   gzip  on;
 
   {{ range $server := lsdir "/lb" }}
-    {{ $release := printf "/lb/%s/release" $server }}
+    {{ $release := printf "/lb/%s/release" $server | getv }}
 
     upstream {{ $server }}_pool {
       {{range printf "/lb/%s/units/%s/*" $server $release | getvs}}
