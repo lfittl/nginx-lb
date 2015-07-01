@@ -5,7 +5,7 @@ error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
 
 events {
-  worker_connections  1024;
+  worker_connections 1024;
 }
 
 http {
@@ -18,8 +18,8 @@ http {
 
   access_log  /var/log/nginx/access.log  main;
 
-  sendfile        on;
-  tcp_nopush     on;
+  sendfile   on;
+  tcp_nopush on;
 
   keepalive_timeout  65;
 
