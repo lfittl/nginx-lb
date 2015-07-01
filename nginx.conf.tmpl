@@ -1,5 +1,5 @@
 user  nginx;
-worker_processes 1;
+worker_processes auto;
 
 error_log  /var/log/nginx/error.log warn;
 pid        /var/run/nginx.pid;
@@ -26,8 +26,10 @@ http {
   gzip  on;
 
   {{ range $server := lsdir "/lb" }}
+    {{ $release := printf "/lb/%s/release" $server }}
+
     upstream {{ $server }}_pool {
-      {{range printf "/lb/%s/upstreams/*" $server | getvs}}
+      {{range printf "/lb/%s/units/%s/*" $server $release | getvs}}
       server {{.}} max_fails=0;
       {{ end }}
     }
