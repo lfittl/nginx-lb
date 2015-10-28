@@ -82,6 +82,11 @@ http {
           return 503;
         {{ end }}
       }
+
+      {{ $config := printf "/lb/%s/config" $server }}
+      {{ if exists $config }}
+        {{ getv $config }}
+      {{ end }}
     }
 
   {{ end }}
